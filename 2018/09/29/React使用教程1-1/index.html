@@ -10,7 +10,7 @@
 		
 
 <head>
-	<title>如何在 JavaScript 中更好地使用数组(--auth:zengyan--)</title>
+	<title>大家好，我是曾小白</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="apple-mobile-web-app-title" content="Amaze UI" />
@@ -54,7 +54,7 @@
 		
 		
 			
-			<p class=page-name>当前文章&nbsp;:&nbsp;《如何在 JavaScript 中更好地使用数组(--auth:zengyan--)》</p>
+			<p class=page-name>当前文章&nbsp;:&nbsp;《》</p>
 			
 		
 	
@@ -161,20 +161,14 @@
 				<h1 class="am-article-title blog-text-center">
 					
 					
-	
-		<a href="/2018/09/27/数组用法/" itemprop="url">		
-			如何在 JavaScript 中更好地使用数组(--auth:zengyan--)		
-		</a>
-	
-
 				</h1>
 
 				<p class="am-article-meta blog-text-center">
 					<span>
 						<i class="fa fa-clock-o"></i> 
-						<a href="/2018/09/27/数组用法/" itemprop="url">
-	<time datetime="2018-09-27T01:55:11.311Z" itemprop="datePublished">
-  		2018-09-27
+						<a href="/2018/09/29/React使用教程1-1/" itemprop="url">
+	<time datetime="2018-09-29T06:01:24.510Z" itemprop="datePublished">
+  		2018-09-29
   </time>
 </a>    
 &nbsp;
@@ -189,113 +183,108 @@
 			<div class="am-article-bd">
 				<div class="content" id="post-content">
 					
-						<p>本文短小精悍，我保证。在过去的数个月里，我注意到在我审阅的 pull request 中有四个（关于数组使用的）错误经常出现。同时，我自己也会犯这些错误，因此有了这篇文章。让我们一起学习，以确保以后能正确地使用数组方法！<a id="more"></a></p>
-<h3 id="使用-Array-includes-替代-Array-indexOf"><a href="#使用-Array-includes-替代-Array-indexOf" class="headerlink" title="使用 Array.includes 替代 Array.indexOf"></a>使用 Array.includes 替代 Array.indexOf</h3><p>如果需要在数组中查找某个元素，请使用 Array.indexOf。</p>
-<p>在 MDN 文档中，对 Array.indexOf 的描述是：返回在数组中可以找到一个给定元素的第一个索引，如果不存在，则返回-1。因此，如果在之后的代码中需要用到（给给定元素的）索引，那么 Array.indexOf 是不二之选。</p>
-<p>然而，如果我们仅需要知道数组中是否包含给定元素呢？这意味着只是是与否的区别，这是一个布尔问题（boolean question）。针对这种情况，我建议使用直接返回布尔值的 Array.includes。</p>
-<pre class="line-numbers language-bash"><code class="language-bash"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-
-const characters <span class="token operator">=</span> <span class="token punctuation">[</span>
-  <span class="token string">'ironman'</span>,
-  <span class="token string">'black_widow'</span>,
-  <span class="token string">'hulk'</span>,
-  <span class="token string">'captain_america'</span>,
-  <span class="token string">'hulk'</span>,
-  <span class="token string">'thor'</span>,
-<span class="token punctuation">]</span><span class="token punctuation">;</span>
-
-console.log<span class="token punctuation">(</span>characters.indexOf<span class="token punctuation">(</span><span class="token string">'hulk'</span><span class="token punctuation">))</span><span class="token punctuation">;</span>
-// 2
-console.log<span class="token punctuation">(</span>characters.indexOf<span class="token punctuation">(</span><span class="token string">'batman'</span><span class="token punctuation">))</span><span class="token punctuation">;</span>
-// -1
-
-console.log<span class="token punctuation">(</span>characters.includes<span class="token punctuation">(</span><span class="token string">'hulk'</span><span class="token punctuation">))</span><span class="token punctuation">;</span>
-// <span class="token boolean">true</span>
-console.log<span class="token punctuation">(</span>characters.includes<span class="token punctuation">(</span><span class="token string">'batman'</span><span class="token punctuation">))</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<!-- More info: [Writing](https://hexo.io/docs/writing.html) -->
-<h3 id="使用-Array-find-替代-Array-filter"><a href="#使用-Array-find-替代-Array-filter" class="headerlink" title="使用 Array.find 替代 Array.filter"></a>使用 Array.find 替代 Array.filter</h3><p>Array.filter 是一个十分有用的方法。它通过回调函数过滤原数组，并将过滤后的项作为新数组返回。正如它的名字所示，我们将这个方法用于过滤，（一般而言）会获得一个长度更短的新数组。</p>
-<p>然而，如果知道经回调函数过滤后，只会剩余唯一的一项，那么我不建议使用 Array.filter。比如：使用等于某个唯一 ID 为过滤条件去过滤一个数组。在这个例子中，Array.filter 返回一个仅有一项的新数组。然而，我们仅仅是为了获取 ID 为特定 ID 的那一项，这个新数组显得毫无用处。</p>
-<p>让我们讨论一下性能。为了获取所有符合回调函数过滤条件的项，Array.filter 必须遍历整个数组。如果原数组中有成千上万项，回调函数需要执行的次数是相当多的。<br>为避免这些情况，我建议使用 Array.find。它与 Array.filter 一样需要一个回调函数，（但只是返回）符合条件的第一项。当找到符合回调函数过滤条件的第一个元素时，它会立即停止往下的搜寻。不再遍历整个数组。</p>
-<pre class="line-numbers language-bash"><code class="language-bash"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-
-const characters <span class="token operator">=</span> <span class="token punctuation">[</span>
-  <span class="token punctuation">{</span> id: 1, name: <span class="token string">'ironman'</span> <span class="token punctuation">}</span>,
-  <span class="token punctuation">{</span> id: 2, name: <span class="token string">'black_widow'</span> <span class="token punctuation">}</span>,
-  <span class="token punctuation">{</span> id: 3, name: <span class="token string">'captain_america'</span> <span class="token punctuation">}</span>,
-  <span class="token punctuation">{</span> id: 4, name: <span class="token string">'captain_america'</span> <span class="token punctuation">}</span>,
-<span class="token punctuation">]</span><span class="token punctuation">;</span>
-
-<span class="token keyword">function</span> getCharacter<span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">return</span> character <span class="token operator">=</span><span class="token operator">></span> character.name <span class="token operator">==</span><span class="token operator">=</span> name<span class="token punctuation">;</span>
+						<hr>
+<h2 id="title-React使用教程1-1-–auth-zengyan–"><a href="#title-React使用教程1-1-–auth-zengyan–" class="headerlink" title="title:React使用教程1-1(–auth:zengyan–)"></a>title:React使用教程1-1(–auth:zengyan–)</h2><p>React 从 v16 开始，像是跨入了新的时代，性能和新的 API 都令人瞩目，本人已经用了一段时间react，最近针对一些新入门的朋友常常问的问题整理了一份react使用文档，如有理解错误的地方，希望多多指正。<a id="more"></a></p>
+<h3 id="学习react常见参考文档"><a href="#学习react常见参考文档" class="headerlink" title="学习react常见参考文档"></a>学习react常见参考文档</h3><p><a href="https://react.css88.com/docs/getting-started.html" target="_blank" rel="noopener">react中文文档</a><br><a href="http://es6.ruanyifeng.com/" target="_blank" rel="noopener">es6语法学习</a><br><a href="https://webpack.css88.com/" target="_blank" rel="noopener">webpack打包工具</a></p>
+<h3 id="import-export"><a href="#import-export" class="headerlink" title="import/export"></a>import/export</h3><pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">import</span> React,<span class="token punctuation">{</span> Component <span class="token punctuation">}</span> from <span class="token string">'react'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>在 ES6 当中引入了一组个新的关键字 import/export，import用于引入其他库文件（注意，以前是用require引入），所有import的文件都是从其他文件导出<br>(export),如果使用export default语句导出，这样的方法每个文件只能导出一个。</p>
+<pre class="line-numbers language-bash"><code class="language-bash">// myFunction.js
+<span class="token function">export</span> default function<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console.log<span class="token punctuation">(</span><span class="token string">'This is default function!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+// index.js
+<span class="token function">import</span> myFunction from <span class="token string">'myFunction'</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>仅用 export 导出的方法，在使用时，则需要把它们包含在大括号里：</p>
+<pre class="line-numbers language-bash"><code class="language-bash">// myAnotherFunction.js
+<span class="token function">export</span> const foo <span class="token operator">=</span> <span class="token string">'bar'</span><span class="token punctuation">;</span>
+<span class="token function">export</span> <span class="token keyword">function</span> bar<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console.log<span class="token punctuation">(</span><span class="token string">'foo'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+// index.js
+<span class="token function">import</span> <span class="token punctuation">{</span> foo, bar <span class="token punctuation">}</span> from <span class="token string">'myAnotherFunction'</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="const"><a href="#const" class="headerlink" title="const"></a>const</h3><p>const关键字在es6语法中被用来声明常量，const声明的实际是一个指针，指针的位置不能改变，但是指针的值是可以操作的。</p>
+<pre class="line-numbers language-bash"><code class="language-bash">// 定义一个空数组Arr
+const Arr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+// 输出空数组的内容
+console.log<span class="token punctuation">(</span>Arr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+// <span class="token punctuation">[</span><span class="token punctuation">]</span>
+// 通过push可以向数组添加内容
+Arr.push<span class="token punctuation">(</span>1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+// 输出新的Arr
+console.log<span class="token punctuation">(</span>Arr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+// <span class="token punctuation">[</span>1<span class="token punctuation">]</span>
+// 但要将 Arr 指向一个新的数组就会报错
+Arr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+// Uncaught TypeError: Assignment to constant variable.
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="let"><a href="#let" class="headerlink" title="let"></a>let</h3><p>let关键字在es6语法中用来声明变量。它的用法类似于var，但是所声明的变量，只在let命令所在的代码块内有效。<br>for循环的计数器，就很合适使用let命令。</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token keyword">for</span> <span class="token punctuation">(</span>let i <span class="token operator">=</span> 0<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> 10<span class="token punctuation">;</span> i++<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  // <span class="token punctuation">..</span>.
 <span class="token punctuation">}</span>
 
-console.log<span class="token punctuation">(</span>characters.filter<span class="token punctuation">(</span>getCharacter<span class="token punctuation">(</span><span class="token string">'captain_america'</span><span class="token punctuation">))</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-// <span class="token punctuation">[</span>
-//   <span class="token punctuation">{</span> id: 3, name: <span class="token string">'captain_america'</span> <span class="token punctuation">}</span>,
-//   <span class="token punctuation">{</span> id: 4, name: <span class="token string">'captain_america'</span> <span class="token punctuation">}</span>,
-// <span class="token punctuation">]</span>
-
-console.log<span class="token punctuation">(</span>characters.find<span class="token punctuation">(</span>getCharacter<span class="token punctuation">(</span><span class="token string">'captain_america'</span><span class="token punctuation">))</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-// <span class="token punctuation">{</span> id: 3, name: <span class="token string">'captain_america'</span> <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="使用-Array-some-替代-Array-find"><a href="#使用-Array-some-替代-Array-find" class="headerlink" title="使用 Array.some 替代 Array.find"></a>使用 Array.some 替代 Array.find</h3><p>我承认我经常犯这个错误。之后，一位朋友建议我去查看 MDN 文档 以寻找更好的方法。事实上（这错误）与上面 Array.indexOf/Array.includes 的例子十分相像。<br>在上面的例子中，我们知道 Array.find 需要一个回调函数作为参数，并返回（符合条件的）第一个元素。然而，当我们需要知道数组中是否存在一个元素时，Array.find 是最好的选择吗？不一定是，因为它返回一个元素，而不是一个布尔值。<br>在下面的例子中，我建议使用 Array.some，它返回你需要的布尔值。</p>
-<pre class="line-numbers language-bash"><code class="language-bash">
-<span class="token string">'use strict'</span><span class="token punctuation">;</span>
-
-const characters <span class="token operator">=</span> <span class="token punctuation">[</span>
-  <span class="token punctuation">{</span> id: 1, name: <span class="token string">'ironman'</span>, env: <span class="token string">'marvel'</span> <span class="token punctuation">}</span>,
-  <span class="token punctuation">{</span> id: 2, name: <span class="token string">'black_widow'</span>, env: <span class="token string">'marvel'</span> <span class="token punctuation">}</span>,
-  <span class="token punctuation">{</span> id: 3, name: <span class="token string">'wonder_woman'</span>, env: <span class="token string">'dc_comics'</span> <span class="token punctuation">}</span>,
-<span class="token punctuation">]</span><span class="token punctuation">;</span>
-
-<span class="token keyword">function</span> hasCharacterFrom<span class="token punctuation">(</span>env<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">return</span> character <span class="token operator">=</span><span class="token operator">></span> character.env <span class="token operator">==</span><span class="token operator">=</span> <span class="token function">env</span><span class="token punctuation">;</span>
+console.log<span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+// ReferenceError: i is not defined
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面代码中，计数器i只在for循环体内有效，在循环体外引用就会报错。</p>
+<p>下面的代码如果使用var，最后输出的是10。</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token keyword">for</span> <span class="token punctuation">(</span>let i <span class="token operator">=</span> 0<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> 10<span class="token punctuation">;</span> i++<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  // <span class="token punctuation">..</span>.
 <span class="token punctuation">}</span>
 
-console.log<span class="token punctuation">(</span>characters.find<span class="token punctuation">(</span>hasCharacterFrom<span class="token punctuation">(</span><span class="token string">'marvel'</span><span class="token punctuation">))</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-// <span class="token punctuation">{</span> id: 1, name: <span class="token string">'ironman'</span>, env: <span class="token string">'marvel'</span> <span class="token punctuation">}</span>
+console.log<span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+// ReferenceError: i is not defined
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>另一个有意思的例子，<br>var i指向的就是全局的i，也就是说，所有数组a的成员里面的i，指向的都是同一个i，导致运行时输出的是最后一轮的i的值，也就是 10。<br>变量i是let声明的，当前的i只在本轮循环有效，所以每一次循环的i其实都是一个新的变量，所以最后输出的是6。</p>
+<pre class="line-numbers language-bash"><code class="language-bash">var a <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>var i <span class="token operator">=</span> 0<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> 10<span class="token punctuation">;</span> i++<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  a<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console.log<span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+a<span class="token punctuation">[</span>6<span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> // 10
 
-console.log<span class="token punctuation">(</span>characters.some<span class="token punctuation">(</span>hasCharacterFrom<span class="token punctuation">(</span><span class="token string">'marvel'</span><span class="token punctuation">))</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-// <span class="token boolean">true</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>译者注：补充一下 Array.some 与 Array.includes 使用上的区别。两者都返回一个布尔值，表示某项是否存在于数组之中，一旦找到对应的项，立即停止遍历数组。不同的是 Array.some 的参数是回调函数，而 Array.includes 的参数是一个值（均不考虑第二个可选参数）。</p>
-<p>假设希望知道值为 value 的项是否存在于数组中，既可以编写代码：[].includes(value)， 也可以给 Array.some 传入 item =&gt; item === value 作为回调函数。Array.includes  使用更简单，Array.some 可操控性更强。</p>
-<h3 id="使用-Array-reduce-替代-Array-filter-与-Array-map-的组合"><a href="#使用-Array-reduce-替代-Array-filter-与-Array-map-的组合" class="headerlink" title="使用 Array.reduce 替代 Array.filter 与 Array.map 的组合"></a>使用 Array.reduce 替代 Array.filter 与 Array.map 的组合</h3><p>事实上说，Array.reduce 不太容易理解。然而，如果我们先使用 Array.filter 过滤原数组，之后（对结果）再调用 Array.map （以获取一个新数组）。这看起似乎有点问题，是我们忽略了什么吗？</p>
-<p>这样做的问题是：我们遍历了两次数组。第一次是过滤原数组以获取一个长度稍短的新数组，第二次遍历（译者注：指 Array.map）是对 Array.filter 的返回的新数组进行加工，再次创造了一个新数组！为得到最终的结果，我们结合使用了两个数组方法。每个方法都有它自己的回调函数，而且供 Array.map 使用的临时数组是由 Array.filter 提供的，（一般而言）该数组无法复用。</p>
-<p>为避免如此低效场景的出现，我的建议是使用 Array.reduce 。一样的结果，更好的代码！Array.reduce 允许你将过滤后切加工过的项放进累加器中。累加器可以是需要待递增的数字、待填充的对象、 待拼接的字符串或数组等。</p>
-<p>在上面的例子中，我们使用了 Array.map，（但更）建议使用累加器为待拼接数组的 Array.reduce 。在下面的例子中，根据变量 env 的值，我们会将它加进累加器中或保持累加器不变（即不作任何处理）。</p>
-<pre class="line-numbers language-bash"><code class="language-bash"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
+var a <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>let i <span class="token operator">=</span> 0<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> 10<span class="token punctuation">;</span> i++<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  a<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console.log<span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+a<span class="token punctuation">[</span>6<span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> // 6
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="class"><a href="#class" class="headerlink" title="class"></a>class</h3><p>在 ES6 当中，我们可以通过 class 关键字继承 React组件 的原型来创建组件。</p>
+<pre class="line-numbers language-bash"><code class="language-bash">class APP extends Component <span class="token punctuation">{</span>
+  constructor<span class="token punctuation">(</span>props<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    super<span class="token punctuation">(</span>props<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里的super其实是为了调用其继承父类的构造函数，由此将子类的this初始化，这样我们才能在后面的代码中调动this.state,this.props</p>
+<h3 id="箭头函数（注意函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。）"><a href="#箭头函数（注意函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。）" class="headerlink" title="箭头函数（注意函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。）"></a>箭头函数（注意函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。）</h3><p>ES6 允许使用“箭头”（=&gt;）定义函数。</p>
+<pre class="line-numbers language-bash"><code class="language-bash">var f <span class="token operator">=</span> <span class="token function">v</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token function">v</span><span class="token punctuation">;</span>
 
-const characters <span class="token operator">=</span> <span class="token punctuation">[</span>
-  <span class="token punctuation">{</span> name: <span class="token string">'ironman'</span>, env: <span class="token string">'marvel'</span> <span class="token punctuation">}</span>,
-  <span class="token punctuation">{</span> name: <span class="token string">'black_widow'</span>, env: <span class="token string">'marvel'</span> <span class="token punctuation">}</span>,
-  <span class="token punctuation">{</span> name: <span class="token string">'wonder_woman'</span>, env: <span class="token string">'dc_comics'</span> <span class="token punctuation">}</span>,
-<span class="token punctuation">]</span><span class="token punctuation">;</span>
+// 等同于
+var f <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>v<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token function">v</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果箭头函数的代码块部分多于一条语句，就要使用大括号将它们括起来，并且使用return语句返回。</p>
+<pre class="line-numbers language-bash"><code class="language-bash">var <span class="token function">sum</span> <span class="token operator">=</span> <span class="token punctuation">(</span>num1, num2<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span> <span class="token keyword">return</span> num1 + num2<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>由于大括号被解释为代码块，所以如果箭头函数直接返回一个对象，必须在对象外面加上括号，否则会报错。</p>
+<pre class="line-numbers language-bash"><code class="language-bash">// 报错
+<span class="token keyword">let</span> getTempItem <span class="token operator">=</span> <span class="token function">id</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span> id: id, name: <span class="token string">"Temp"</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-console.log<span class="token punctuation">(</span>
-  characters
-    .filter<span class="token punctuation">(</span>character <span class="token operator">=</span><span class="token operator">></span> character.env <span class="token operator">==</span><span class="token operator">=</span> <span class="token string">'marvel'</span><span class="token punctuation">)</span>
-    .map<span class="token punctuation">(</span>character <span class="token operator">=</span><span class="token operator">></span> Object.assign<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span>, character, <span class="token punctuation">{</span> alsoSeenIn: <span class="token punctuation">[</span><span class="token string">'Avengers'</span><span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">))</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span>
-// <span class="token punctuation">[</span>
-//   <span class="token punctuation">{</span> name: <span class="token string">'ironman'</span>, env: <span class="token string">'marvel'</span>, alsoSeenIn: <span class="token punctuation">[</span><span class="token string">'Avengers'</span><span class="token punctuation">]</span> <span class="token punctuation">}</span>,
-//   <span class="token punctuation">{</span> name: <span class="token string">'black_widow'</span>, env: <span class="token string">'marvel'</span>, alsoSeenIn: <span class="token punctuation">[</span><span class="token string">'Avengers'</span><span class="token punctuation">]</span> <span class="token punctuation">}</span>
-// <span class="token punctuation">]</span>
-
-console.log<span class="token punctuation">(</span>
-  characters
-    .reduce<span class="token punctuation">((</span>acc, character<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
-      <span class="token keyword">return</span> character.env <span class="token operator">==</span><span class="token operator">=</span> <span class="token string">'marvel'</span>
-        ? acc.concat<span class="token punctuation">(</span>Object.assign<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span>, character, <span class="token punctuation">{</span> alsoSeenIn: <span class="token punctuation">[</span><span class="token string">'Avengers'</span><span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">))</span>
-        <span class="token keyword">:</span> acc<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>, <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span>
-// <span class="token punctuation">[</span>
-//   <span class="token punctuation">{</span> name: <span class="token string">'ironman'</span>, env: <span class="token string">'marvel'</span>, alsoSeenIn: <span class="token punctuation">[</span><span class="token string">'Avengers'</span><span class="token punctuation">]</span> <span class="token punctuation">}</span>,
-//   <span class="token punctuation">{</span> name: <span class="token string">'black_widow'</span>, env: <span class="token string">'marvel'</span>, alsoSeenIn: <span class="token punctuation">[</span><span class="token string">'Avengers'</span><span class="token punctuation">]</span> <span class="token punctuation">}</span>
-// <span class="token punctuation">]</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+// 不报错
+<span class="token keyword">let</span> getTempItem <span class="token operator">=</span> <span class="token function">id</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">(</span><span class="token punctuation">{</span> id: id, name: <span class="token string">"Temp"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>箭头函数使得表达更加简洁。箭头函数的作用是简化回调函数</p>
+<pre class="line-numbers language-bash"><code class="language-bash">const isEven <span class="token operator">=</span> n <span class="token operator">=</span><span class="token operator">></span> n % 2 <span class="token operator">==</span><span class="token operator">=</span> 0<span class="token punctuation">;</span>
+const square <span class="token operator">=</span> n <span class="token operator">=</span><span class="token operator">></span> n * n<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>1、在 ES6 中新加入的 import 和 export 可以方便我们很好地组织引用代码的各个模块。（所以代码可以更好地模块化和组件化）<br>2、const和let的用法和区别，const定义常量，实际是一个指针，如果是数组或者对象，可以通过push等方法改变值，let定义变量，都是块级作用域，不存在变量提升<br>3、class类的实现主要是继承父级的原型，super主要是用来调用父级的构造函数，以使得我们能够在子类中正确的获取this<br>4、箭头函数，相当于是缩写函数的语法糖，同时，在react中使用箭头函数能实现制动绑定this的功能</p>
 
 					
 				</div>
@@ -304,13 +293,13 @@ console.log<span class="token punctuation">(</span>
 
 		<ul class="am-pagination">
     
-    	<li class="am-pagination-prev">
-   		<a class="pull-left" href="/2018/09/29/React使用教程1-1/" title="">
-      		&laquo; 上一篇
+	
+		<li class="am-pagination-next">
+		<a class="pull-right" href="/2018/09/27/数组用法/" title="如何在 JavaScript 中更好地使用数组(--auth:zengyan--)">
+			下一篇 &raquo;
 		</a>
 		</li>
-	
-	
+	 
  </ul>
         
 
@@ -398,7 +387,7 @@ console.log<span class="token punctuation">(</span>
 				
 				
 				<!--toc(post.content)-->
-				<ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用-Array-includes-替代-Array-indexOf"><span class="post-toc-text">使用 Array.includes 替代 Array.indexOf</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用-Array-find-替代-Array-filter"><span class="post-toc-text">使用 Array.find 替代 Array.filter</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用-Array-some-替代-Array-find"><span class="post-toc-text">使用 Array.some 替代 Array.find</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用-Array-reduce-替代-Array-filter-与-Array-map-的组合"><span class="post-toc-text">使用 Array.reduce 替代 Array.filter 与 Array.map 的组合</span></a></li></ol>
+				<ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#title-React使用教程1-1-–auth-zengyan–"><span class="post-toc-text">title:React使用教程1-1(–auth:zengyan–)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#学习react常见参考文档"><span class="post-toc-text">学习react常见参考文档</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#import-export"><span class="post-toc-text">import/export</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#const"><span class="post-toc-text">const</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#let"><span class="post-toc-text">let</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#class"><span class="post-toc-text">class</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#箭头函数（注意函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。）"><span class="post-toc-text">箭头函数（注意函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol></li></ol>
 			</nav>
 			<div class="post-toc-bar"><div>
 		</aside>
